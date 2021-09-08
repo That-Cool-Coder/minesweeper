@@ -22,9 +22,12 @@ class Cell extends spnr.GameEngine.Button {
         this.isMine = isMine;
         this.isFlagged = false;
         this.isHidden = true;
+        this.inputLocked = false;
         this.discoveredByClicking = false;
-
+        this.numSurroundingMines = 0;
+        
         this.mouseUpCallbacks.add(() => {
+            if (this.inputLocked) return;
             if (spnr.GameEngine.keyboard.keyIsDown('ControlLeft') ||
                 spnr.GameEngine.keyboard.keyIsDown('ControlRight')) {
                 if (this.isHidden) {
@@ -43,6 +46,10 @@ class Cell extends spnr.GameEngine.Button {
         });
     }
 
+    get gridScale() {
+        return this._gridScale;
+    }
+
     set gridScale(gridScale) {
         this._gridScale = gridScale;
         this.setTextureSize(spnr.v(this._gridScale, this._gridScale));
@@ -52,8 +59,8 @@ class Cell extends spnr.GameEngine.Button {
         ));
     }
 
-    get gridScale() {
-        return this._gridScale;
+    get isHidden() {
+        return this._hidden;
     }
 
     set isHidden(value) {
@@ -61,19 +68,10 @@ class Cell extends spnr.GameEngine.Button {
 
         if (this._hidden) {
             this.label.setText('');
-            this.setTexture(Cell.hiddenTexture);
         }
         else {
             if (this.numSurroundingMines == 0 || this.isMine) this.label.setText('');
             else this.label.setText(this.numSurroundingMines);
-
-            if (this.isMine && this.discoveredByClicking)
-                this.setTexture(Cell.mineDiscoveredClickedTexture);
-            else if (this.isMine && ! this.discoveredByClicking)
-                this.setTexture(Cell.mineDiscoveredUnlickedTexture);
-            else if (this.isFlagged && ! this.isMine)
-                this.setTexture(Cell.falselyFlaggedTexture);
-            else this.setTexture(Cell.discoveredTexture);
 
             for (var cell of this.surroundingCells) {
                 if (cell.isHidden && ! cell.isMine) {
@@ -83,21 +81,25 @@ class Cell extends spnr.GameEngine.Button {
                 }
             }
         }
-    }
-
-    get isHidden() {
-        return this._hidden;
-    }
-
-    set isFlagged(value) {
-        this._isFlagged = value;
-        if (this._isFlagged) this.setTexture(Cell.flaggedTexture);
-        else if (this.isHidden) this.setTexture(Cell.hiddenTexture);
-        else this.setTexture(Cell.discoveredTexture)
+        this.updateTexture();
     }
 
     get isFlagged() {
         return this._isFlagged;
+    }
+
+    set isFlagged(value) {
+        this._isFlagged = value;
+        this.updateTexture();
+    }
+
+    get isMine() {
+        return this._isMine;
+    }
+
+    set isMine(value) {
+        this._isMine = value;
+        this.updateTexture();
     }
 
     get surroundingCells() {
@@ -113,6 +115,19 @@ class Cell extends spnr.GameEngine.Button {
             }
             return this._surroundingCells;
         }
+    }
+
+    updateTexture() {
+        // Make the texture match the cell's current state
+        if (this.isHidden)
+            this.setTexture(Cell.hiddenTexture);
+        else if (this.isMine && this.discoveredByClicking)
+            this.setTexture(Cell.mineDiscoveredClickedTexture);
+        else if (this.isMine && ! this.discoveredByClicking)
+            this.setTexture(Cell.mineDiscoveredUnlickedTexture);
+        else if (this.isFlagged && ! this.isMine)
+            this.setTexture(Cell.falselyFlaggedTexture);
+        else this.setTexture(Cell.discoveredTexture);
     }
 
     updateCellList(cellList) {
