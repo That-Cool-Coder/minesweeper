@@ -2,6 +2,15 @@ class MinesweeperBoard extends spnr.GameEngine.Scene {
     constructor(gridSize=spnr.v(10, 10)) {
         super('MinesweeperBoard');
         this.gridSize = spnr.v.copy(gridSize);
+    }
+
+    onSelected() {
+        this.reset();
+    }
+
+    reset() {
+        this.playerHasWon = false;
+        this.playerHasLost = false;
         this.generateCells();
     }
 
@@ -10,10 +19,11 @@ class MinesweeperBoard extends spnr.GameEngine.Scene {
         var scale = spnr.min(canvasSize.x, canvasSize.y) / spnr.max(this.gridSize.x, this.gridSize.y);
         
         this.cells = [];
+        this.removeChildren();
 
         spnr.doNTimes(this.gridSize.y, row => {
             spnr.doNTimes(this.gridSize.x, col => {
-                var isMine = spnr.randflt(0, 1) < 0.25;
+                var isMine = spnr.randflt(0, 1) < 0.125;
                 var cell = new Cell(spnr.v(col, row), scale, isMine);
                 cell.updateCellList(this.cells);
                 this.addChild(cell);
@@ -24,4 +34,33 @@ class MinesweeperBoard extends spnr.GameEngine.Scene {
         this.cells.forEach(child => child.calcSurroundingMines());
     }
 
+    update() {
+        if (! this.playerHasWon && ! this.playerHasLost) {
+            var allNonMinesDiscovered = true;
+            var mineClicked = false;
+            for (var cell of this.cells) {
+                if (! cell.isMine && cell.hidden) {
+                    allNonMinesDiscovered = false;
+                }
+                if (cell.isMine && ! cell.hidden) {
+                    mineClicked = true;
+                }
+            }
+
+            if (allNonMinesDiscovered && ! mineClicked) {
+                this.playerHasWon = true;
+                setTimeout(() => {
+                    alert('You win!');
+                    this.reset();
+                }, 1000);
+            }
+            else if (mineClicked) {
+                this.playerHasWon = true;
+                setTimeout(() => {
+                    alert('You lose!');
+                    this.reset();
+                }, 1000);
+            }
+        }
+    }
 }
