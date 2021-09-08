@@ -20,7 +20,7 @@ class MinesweeperBoard extends spnr.GameEngine.Scene {
 
         spnr.doNTimes(this.gridSize.y, row => {
             spnr.doNTimes(this.gridSize.x, col => {
-                var isMine = spnr.randflt(0, 1) < 0.125;
+                var isMine = spnr.randflt(0, 1) < 0.15;
                 var cell = new Cell(spnr.v(col, row), 1, isMine);
                 cell.updateCellList(this.cells);
                 this.addChild(cell);
