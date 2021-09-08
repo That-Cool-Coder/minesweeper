@@ -25,7 +25,8 @@ class Cell extends spnr.GameEngine.Button {
         this.discoveredByClicking = false;
 
         this.mouseUpCallbacks.add(() => {
-            if (spnr.GameEngine.keyboard.keyIsDown('Space')) {
+            if (spnr.GameEngine.keyboard.keyIsDown('ControlLeft') ||
+                spnr.GameEngine.keyboard.keyIsDown('ControlRight')) {
                 this.isFlagged = ! this.isFlagged;
             }
             else {
