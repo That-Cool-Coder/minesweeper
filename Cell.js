@@ -1,16 +1,16 @@
 class Cell extends spnr.GameEngine.Button {
     static hiddenTexture =
-        spnr.GameEngine.Texture.fromUrl('/assets/cellHidden.png');
+        spnr.GameEngine.Texture.fromUrl('assets/cellHidden.png');
     static discoveredTexture =
-        spnr.GameEngine.Texture.fromUrl('/assets/cellDiscovered.png');
+        spnr.GameEngine.Texture.fromUrl('assets/cellDiscovered.png');
     static flaggedTexture =
-        spnr.GameEngine.Texture.fromUrl('/assets/cellFlagged.png');
+        spnr.GameEngine.Texture.fromUrl('assets/cellFlagged.png');
     static falselyFlaggedTexture =
-        spnr.GameEngine.Texture.fromUrl('/assets/cellFalselyFlagged.png');
+        spnr.GameEngine.Texture.fromUrl('assets/cellFalselyFlagged.png');
     static mineDiscoveredClickedTexture =
-        spnr.GameEngine.Texture.fromUrl('/assets/mineDiscoveredClicked.png');
+        spnr.GameEngine.Texture.fromUrl('assets/mineDiscoveredClicked.png');
     static mineDiscoveredUnlickedTexture =
-        spnr.GameEngine.Texture.fromUrl('/assets/mineDiscoveredUnclicked.png');
+        spnr.GameEngine.Texture.fromUrl('assets/mineDiscoveredUnclicked.png');
     static textFormat = {fontSize : 20};
 
     constructor(gridPosition, gridScale, isMine=false) {
