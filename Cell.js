@@ -41,6 +41,12 @@ class Cell extends spnr.GameEngine.Button {
                 }
             }
         });
+
+        this.sprite.rightdown = () => {
+            if (this.isHidden) {
+                this.isFlagged = ! this.isFlagged;
+            }
+        }
     }
 
     set gridScale(gridScale) {
