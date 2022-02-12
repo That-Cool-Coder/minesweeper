@@ -1,21 +1,8 @@
 class Cell extends spnr.GameEngine.Button {
-    static hiddenTexture =
-        spnr.GameEngine.Texture.fromUrl('assets/cellHidden.png');
-    static discoveredTexture =
-        spnr.GameEngine.Texture.fromUrl('assets/cellDiscovered.png');
-    static flaggedTexture =
-        spnr.GameEngine.Texture.fromUrl('assets/cellFlagged.png');
-    static falselyFlaggedTexture =
-        spnr.GameEngine.Texture.fromUrl('assets/cellFalselyFlagged.png');
-    static mineDiscoveredClickedTexture =
-        spnr.GameEngine.Texture.fromUrl('assets/mineDiscoveredClicked.png');
-    static mineDiscoveredUnlickedTexture =
-        spnr.GameEngine.Texture.fromUrl('assets/mineDiscoveredUnclicked.png');
-    static textFormat = {fontSize : 20};
-
     constructor(gridPosition, gridScale, isMine=false) {
         super('Cell', spnr.v(0, 0), spnr.PI, spnr.v(10, 10), Cell.hiddenTexture,
             '', Cell.textFormat);
+        if (Cell.hiddenTexture == undefined) Cell.setupStatics();
         this.addTag('Cell');
         this.gridPosition = spnr.v.copy(gridPosition);
         this.gridScale = gridScale;
@@ -47,6 +34,22 @@ class Cell extends spnr.GameEngine.Button {
                 this.isFlagged = ! this.isFlagged;
             }
         }
+    }
+
+    static setupStatics() {
+        this.hiddenTexture =
+            spnr.GameEngine.Texture.fromUrl('assets/cellHidden.png');
+        this.discoveredTexture =
+            spnr.GameEngine.Texture.fromUrl('assets/cellDiscovered.png');
+        this.flaggedTexture =
+            spnr.GameEngine.Texture.fromUrl('assets/cellFlagged.png');
+        this.falselyFlaggedTexture =
+            spnr.GameEngine.Texture.fromUrl('assets/cellFalselyFlagged.png');
+        this.mineDiscoveredClickedTexture =
+            spnr.GameEngine.Texture.fromUrl('assets/mineDiscoveredClicked.png');
+        this.mineDiscoveredUnlickedTexture =
+            spnr.GameEngine.Texture.fromUrl('assets/mineDiscoveredUnclicked.png');
+        this.textFormat = {fontSize : 20};
     }
 
     set gridScale(gridScale) {
